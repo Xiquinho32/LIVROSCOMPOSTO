@@ -20,6 +20,7 @@ class BDLivrosOpenHelper(
         requireNotNull(db)
 
         TabelaBDCategorias(db).cria()
+        TabelaBDLivros(db).cria()
     }
 
     /**
