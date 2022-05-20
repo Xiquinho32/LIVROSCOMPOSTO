@@ -17,7 +17,9 @@ class BDLivrosOpenHelper(
      * @param db The database.
      */
     override fun onCreate(db: SQLiteDatabase?) {
-        TODO("Not yet implemented")
+        requireNotNull(db)
+
+        TabelaBDCategorias(db).cria()
     }
 
     /**
@@ -43,6 +45,5 @@ class BDLivrosOpenHelper(
      * @param newVersion The new database version.
      */
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        TODO("Not yet implemented")
     }
 }
