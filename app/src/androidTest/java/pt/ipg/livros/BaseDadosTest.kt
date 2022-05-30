@@ -16,7 +16,7 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class BaseDadosTest {
-    fun appContext() =
+    private fun appContext() =
         InstrumentationRegistry.getInstrumentation().targetContext
 
     private fun getWritableDatabase(): SQLiteDatabase {
@@ -27,6 +27,11 @@ class BaseDadosTest {
     private fun insereCategoria(db: SQLiteDatabase, categoria: Categoria) {
         categoria.id = TabelaBDCategorias(db).insert(categoria.toContentValues())
         assertNotEquals(-1, categoria.id)
+    }
+
+    private fun insereLivro(db: SQLiteDatabase, livro: Livro) {
+        livro.id = TabelaBDLivros(db).insert(livro.toContentValues())
+        assertNotEquals(-1, livro.id)
     }
 
     @Before
@@ -61,9 +66,7 @@ class BaseDadosTest {
         insereCategoria(db, categoria)
 
         val livro = Livro("O Leão que Temos Cá Dentro", "Rachel Bright", categoria.id)
-        livro.id = TabelaBDLivros(db).insert(livro.toContentValues())
-
-        assertNotEquals(-1, livro.id)
+        insereLivro(db, livro)
 
         db.close()
     }
@@ -81,6 +84,33 @@ class BaseDadosTest {
             categoria.toContentValues(),
             "${BaseColumns._ID}=?",
             arrayOf("${categoria.id}"))
+
+        assertEquals(1, registosAlterados)
+
+        db.close()
+    }
+
+    @Test
+    fun consegueAlterarLivros() {
+        val db = getWritableDatabase()
+
+        val categoriaSuspense = Categoria("Suspense")
+        insereCategoria(db, categoriaSuspense)
+
+        val categoriaMisterio = Categoria("Mistério")
+        insereCategoria(db, categoriaMisterio)
+
+        val livro = Livro("Teste", "Teste", categoriaSuspense.id)
+        insereLivro(db, livro)
+
+        livro.titulo = "A rapariga no comboio"
+        livro.autor = "Paula Hawkins"
+        livro.idCategoria = categoriaMisterio.id
+
+        val registosAlterados = TabelaBDLivros(db).update(
+            livro.toContentValues(),
+            "${BaseColumns._ID}=?",
+            arrayOf("${livro.id}"))
 
         assertEquals(1, registosAlterados)
 
