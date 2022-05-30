@@ -3,10 +3,10 @@ package pt.ipg.livros
 import android.content.ContentValues
 
 data class Livro(
-    var id: Long,
     var titulo : String,
     var autor: String,
-    var idCategoria: Long
+    var idCategoria: Long,
+    var id: Long = -1
 ) {
     fun toContentValues() : ContentValues {
         val valores = ContentValues()

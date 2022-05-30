@@ -1,14 +1,12 @@
 package pt.ipg.livros
 
 import android.database.sqlite.SQLiteDatabase
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-
-import org.junit.Test
-import org.junit.runner.RunWith
-
+import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -23,6 +21,11 @@ class BaseDadosTest {
     private fun getWritableDatabase(): SQLiteDatabase {
         val openHelper = BDLivrosOpenHelper(appContext())
         return openHelper.writableDatabase
+    }
+
+    private fun insereCategoria(db: SQLiteDatabase, categoria: Categoria) {
+        categoria.id = TabelaBDCategorias(db).insert(categoria.toContentValues())
+        assertNotEquals(-1, categoria.id)
     }
 
     @Before
@@ -44,9 +47,22 @@ class BaseDadosTest {
     fun consegueInserirCategoria() {
         val db = getWritableDatabase()
 
-        val categoria = Categoria("Drama")
+        insereCategoria(db, Categoria("Drama"))
 
-        TabelaBDCategorias(db).insert(categoria.toContentValues())
+        db.close()
+    }
+
+    @Test
+    fun consegueInserirLivro() {
+        val db = getWritableDatabase()
+
+        val categoria = Categoria("Aventura")
+        insereCategoria(db, categoria)
+
+        val livro = Livro("O Leão que Temos Cá Dentro", "Rachel Bright", categoria.id)
+        livro.id = TabelaBDLivros(db).insert(livro.toContentValues())
+
+        assertNotEquals(-1, livro.id)
 
         db.close()
     }
