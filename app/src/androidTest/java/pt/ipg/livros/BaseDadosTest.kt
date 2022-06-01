@@ -49,7 +49,7 @@ class BaseDadosTest {
         db.close()
     }
 
-    @Test
+    @Test 
     fun consegueInserirCategoria() {
         val db = getWritableDatabase()
 
