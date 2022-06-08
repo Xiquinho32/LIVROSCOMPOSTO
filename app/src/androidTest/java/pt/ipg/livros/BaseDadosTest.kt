@@ -161,8 +161,20 @@ class BaseDadosTest {
         val categoria = Categoria("Aventura")
         insereCategoria(db, categoria) //inserir categoria
 
-        TabelaBDCategorias(db).query()
 
+        val cursor = TabelaBDCategorias(db).query(
+            TabelaBDCategorias.TODAS_COLUNAS,
+            "${BaseColumns._ID}=?",
+            arrayOf("${categoria.id}"),
+            null,
+            null,
+            null
+        )
+        assertEquals(1,cursor.count)
+        assertTrue(cursor.moveToNext())
+
+        val categoriaBD = Categoria.fromCursor(cursor)  //categoria que tenho na BD
+        assertEquals(categoria, categoriaBD) //comparar as duas categorias para ver se sao iguais
 
         db.close()
     }
