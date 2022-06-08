@@ -116,4 +116,25 @@ class BaseDadosTest {
 
         db.close()
     }
+    @Test
+    fun consegueElimiarCategoria(){
+        val db = getWritableDatabase()
+
+        val categoria = Categoria("Teste")
+        insereCategoria(db, categoria) //inserir categoria
+
+
+        val registosEliminados = TabelaBDCategorias(db).delete(
+
+            "${BaseColumns._ID}=?",
+            arrayOf("${categoria.id}"))
+
+        assertEquals(1, registosEliminados)
+
+        db.close()
+    }
+    @Test
+    fun consegueEliminarLivros(){
+
+    }
 }
