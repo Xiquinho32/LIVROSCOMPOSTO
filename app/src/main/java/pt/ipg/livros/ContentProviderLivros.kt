@@ -3,11 +3,15 @@ package pt.ipg.livros
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
+import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 
 class ContentProviderLivros: ContentProvider() {
+    var dbOpenHelper : BDLivrosOpenHelper? = null
     override fun onCreate(): Boolean {
-        TODO("Not yet implemented")
+
+        dbOpenHelper = BDLivrosOpenHelper(context)
+        return true
     }
 
     override fun query(
