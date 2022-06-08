@@ -153,4 +153,17 @@ class BaseDadosTest {
 
         db.close()
     }
+
+    @Test
+    fun consegueLerCategorias(){
+        val db = getWritableDatabase()
+
+        val categoria = Categoria("Aventura")
+        insereCategoria(db, categoria) //inserir categoria
+
+        TabelaBDCategorias(db).query()
+
+
+        db.close()
+    }
 }
