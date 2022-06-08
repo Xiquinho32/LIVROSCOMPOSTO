@@ -185,8 +185,8 @@ class BaseDadosTest {
         val categoria = Categoria("Culinária")
         insereCategoria(db, categoria)
 
-        val livro = Categoria("As delicias dela", "Elaa", categoria.id)
-        insereCategoria(db, livro)
+        val livro = Livro("as delicias das toupeiras", "benifca ", categoria.id)
+        insereLivro(db, livro)
 
 
         val registosEliminados = TabelaBDCategorias(db).delete(
