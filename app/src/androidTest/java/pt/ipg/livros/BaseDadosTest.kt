@@ -135,6 +135,22 @@ class BaseDadosTest {
     }
     @Test
     fun consegueEliminarLivros(){
+        val db = getWritableDatabase()
 
+        val categoria = Categoria("Suspense")
+        insereCategoria(db, categoria)
+
+        val livro = Categoria("Auto ajuda")
+        insereCategoria(db, livro)
+
+
+        val registosEliminados = TabelaBDCategorias(db).delete(
+
+            "${BaseColumns._ID}=?",
+            arrayOf("${livro.id}"))
+
+        assertEquals(1, registosEliminados)
+
+        db.close()
     }
 }
