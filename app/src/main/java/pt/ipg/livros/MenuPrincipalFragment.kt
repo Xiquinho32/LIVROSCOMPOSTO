@@ -11,6 +11,8 @@ import pt.ipg.livros.databinding.FragmentMenuPrincipalBinding
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
+
+//binding, uma variavel ja definida onde posso ir buscar tudo :)
 class MenuPrincipalFragment : Fragment() {
 
     private var _binding: FragmentMenuPrincipalBinding? = null
@@ -32,9 +34,9 @@ class MenuPrincipalFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-      //  binding.buttonFirst.setOnClickListener {
-       //     findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        //}
+        binding.buttonLivros.setOnClickListener {
+       findNavController().navigate(R.id.action_MenuPrincipalFragment_to_ListaLivrosFragment) //botao para passar do menu à lista
+        }
     }
 
     override fun onDestroyView() {
