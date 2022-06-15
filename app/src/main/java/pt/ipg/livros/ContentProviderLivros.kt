@@ -25,19 +25,26 @@ class ContentProviderLivros: ContentProvider() {
         TODO("Not yet implemented")
     }
 
-    override fun getType(p0: Uri): String? {
+    override fun getType(uri: Uri): String? =
+        when(getUriMatcher().match(uri)){
+            URI_LIVROS -> "$MULTIPLOS_REGISTOS/${TabelaBDLivros.NOME}"
+            URI_CATEGORIAS -> "$MULTIPLOS_REGISTOS/${TabelaBDCategorias.NOME}"
+            URI_CATEGORIAS_ESPECIFICA -> "$UNICO_REGISTO/${TabelaBDCategorias.NOME}"
+            URI_LIVROS_ESPECIFICA -> "$UNICO_REGISTO/${TabelaBDLivros.NOME}"
+            else -> null
+        }
+
+
+
+    override fun insert(uri: Uri, p1: ContentValues?): Uri? {
         TODO("Not yet implemented")
     }
 
-    override fun insert(p0: Uri, p1: ContentValues?): Uri? {
+    override fun delete(uri: Uri, p1: String?, p2: Array<out String>?): Int {
         TODO("Not yet implemented")
     }
 
-    override fun delete(p0: Uri, p1: String?, p2: Array<out String>?): Int {
-        TODO("Not yet implemented")
-    }
-
-    override fun update(p0: Uri, p1: ContentValues?, p2: String?, p3: Array<out String>?): Int {
+    override fun update(uri: Uri, p1: ContentValues?, p2: String?, p3: Array<out String>?): Int {
         TODO("Not yet implemented")
     }
     companion object{
@@ -47,6 +54,9 @@ class ContentProviderLivros: ContentProvider() {
 
         const val URI_CATEGORIAS_ESPECIFICA = 101
         const val URI_LIVROS_ESPECIFICA = 201
+
+        const val UNICO_REGISTO = "vnd.android.cursor.item"
+        const val MULTIPLOS_REGISTOS = "vnd.android.cursor.dir"
 
         fun getUriMatcher() : UriMatcher{
             val uriMatcher = UriMatcher(UriMatcher.NO_MATCH) //nao existe correspondência
