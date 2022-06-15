@@ -4,7 +4,6 @@ import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
-import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 import android.provider.BaseColumns
 
@@ -52,7 +51,7 @@ class ContentProviderLivros: ContentProvider() {
 
 
 
-    override fun insert(uri: Uri, p1: ContentValues?): Uri? {
+    override fun insert(uri: Uri, values: ContentValues?): Uri? {
         val db = dbOpenHelper!!.writableDatabase//escrver na bd, nao é null
 
         requireNotNull(values)
@@ -68,6 +67,7 @@ class ContentProviderLivros: ContentProvider() {
     }
 
     override fun delete(uri: Uri, p1: String?, p2: Array<out String>?): Int {
+
         val db = dbOpenHelper!!.writableDatabase
 
         val id = uri.lastPathSegment //da o ultimo segmento
@@ -80,8 +80,18 @@ class ContentProviderLivros: ContentProvider() {
         }
     }
 
-    override fun update(uri: Uri, p1: ContentValues?, p2: String?, p3: Array<out String>?): Int {
-        TODO("Not yet implemented")
+    override fun update(uri: Uri, p1: ContentValues?, values: String?, p3: Array<out String>?): Int {
+        requireNotNull(values)
+        val db = dbOpenHelper!!.writableDatabase
+
+        val id = uri.lastPathSegment //da o ultimo segmento
+        //content://pt.ipg.Livros/categoria/5 <- é o 5
+
+        return when(getUriMatcher().match(uri)){
+            URI_CATEGORIAS_ESPECIFICA -> TabelaBDCategorias(db).update(values, "${BaseColumns._ID}=?", arrayOf("$id"))
+            URI_LIVROS_ESPECIFICA -> TabelaBDLivros(db).update(values,  "${BaseColumns._ID}=?", arrayOf("$id"))
+            else -> 0
+        }
     }
     companion object{
         const val AUTORIDADE = "pt.ipg.livros"
