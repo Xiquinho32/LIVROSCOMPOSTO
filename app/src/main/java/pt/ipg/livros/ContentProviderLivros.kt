@@ -24,7 +24,7 @@ class ContentProviderLivros: ContentProvider() {
     ): Cursor? {
 
         val db = dbOpenHelper!!.readableDatabase //ler bd, nao é null
-
+        requireNotNull(p2)
         val colunas = p1 as Array<String>
         val selArgs = p3 as Array<String>
 
