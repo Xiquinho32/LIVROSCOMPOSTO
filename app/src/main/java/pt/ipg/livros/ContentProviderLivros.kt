@@ -6,6 +6,7 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
+import android.provider.BaseColumns
 
 class ContentProviderLivros: ContentProvider() {
     var dbOpenHelper : BDLivrosOpenHelper? = null
@@ -22,7 +23,22 @@ class ContentProviderLivros: ContentProvider() {
         p3: Array<out String>?,
         p4: String?
     ): Cursor? {
-        TODO("Not yet implemented")
+
+        val db = dbOpenHelper!!.readableDatabase //ler bd, nao é null
+
+        val colunas = p1 as Array<String>
+        val selArgs = p3 as Array<String>
+
+        val id = uri.lastPathSegment //da o ultimo segmento
+        //content://pt.ipg.Livros/categoria/5 <- é o 5
+
+        return when(getUriMatcher().match(uri)){
+            URI_LIVROS -> TabelaBDLivros(db).query(colunas, p2, selArgs, null, null, p4)
+            URI_CATEGORIAS -> TabelaBDCategorias(db).query(colunas, p2, selArgs, null, null, p4)
+            URI_CATEGORIAS_ESPECIFICA -> TabelaBDCategorias(db).query(colunas, "${BaseColumns._ID}=?", arrayOf("$id"), null, null, null)
+            URI_LIVROS_ESPECIFICA -> TabelaBDLivros(db).query(colunas, "${BaseColumns._ID}=?", arrayOf("$id"),null, null, null)
+            else -> null
+        }
     }
 
     override fun getType(uri: Uri): String? =
