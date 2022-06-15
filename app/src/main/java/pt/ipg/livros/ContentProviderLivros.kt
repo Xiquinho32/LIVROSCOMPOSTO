@@ -17,7 +17,7 @@ class ContentProviderLivros: ContentProvider() {
     }
 
     override fun query(
-        p0: Uri,
+        uri: Uri,
         p1: Array<out String>?,
         p2: String?,
         p3: Array<out String>?,
@@ -53,11 +53,31 @@ class ContentProviderLivros: ContentProvider() {
 
 
     override fun insert(uri: Uri, p1: ContentValues?): Uri? {
-        TODO("Not yet implemented")
+        val db = dbOpenHelper!!.writableDatabase//escrver na bd, nao é null
+
+        requireNotNull(values)
+
+        val id = when(getUriMatcher().match(uri)){
+            URI_LIVROS -> TabelaBDLivros(db).insert(values)
+            URI_CATEGORIAS -> TabelaBDCategorias(db).insert(values)
+            else -> -1
+        }
+        if(id == -1L) return null //significa que nao consegui inserir
+
+        return Uri.withAppendedPath(uri, "$id")
     }
 
     override fun delete(uri: Uri, p1: String?, p2: Array<out String>?): Int {
-        TODO("Not yet implemented")
+        val db = dbOpenHelper!!.writableDatabase
+
+        val id = uri.lastPathSegment //da o ultimo segmento
+        //content://pt.ipg.Livros/categoria/5 <- é o 5
+
+        return when(getUriMatcher().match(uri)){
+            URI_CATEGORIAS_ESPECIFICA -> TabelaBDCategorias(db).delete( "${BaseColumns._ID}=?", arrayOf("$id"))
+            URI_LIVROS_ESPECIFICA -> TabelaBDLivros(db).delete( "${BaseColumns._ID}=?", arrayOf("$id"))
+            else -> 0
+        }
     }
 
     override fun update(uri: Uri, p1: ContentValues?, p2: String?, p3: Array<out String>?): Int {
